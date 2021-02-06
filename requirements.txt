@@ -1,0 +1,8 @@
+tensorflow
+tensorflow-text
+sentencepiece
+scipy
+
+black
+isort
+flake8
