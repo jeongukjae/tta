@@ -1,0 +1,12 @@
+{
+    "vocab_size": 15000,
+    "num_hidden_layers": 3,
+    "hidden_size": 512,
+    "intermediate_size": 2048,
+    "intermediate_activation": "gelu",
+    "num_attention_heads": 8,
+    "max_position_ids": 128,
+    "dropout_rate": 0.1,
+    "attention_probs_dropout_rate": 0.1,
+    "initializer_range": 0.02
+}
