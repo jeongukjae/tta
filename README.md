@@ -83,6 +83,30 @@ This repository contains codes for Transformer-based Text Auto-encoder (T-TA, [p
 
 KorSTS development and test set scores (100 * Spearman Correlation). You can check the details of other models on [this paper (KorNLI and KorSTS: New Benchmark Datasets for Korean Natural Language Understanding)](https://arxiv.org/abs/2004.03289).
 
+## How to use pre-trained weight using tensorflow-hub
+
+```python
+>>> import tensorflow as tf
+>>> import tensorflow_text as text
+>>> import tensorflow_hub as hub
+>>> # load model
+>>> model = hub.KerasLayer("https://github.com/jeongukjae/tta/releases/download/0/model.tar.gz")
+>>> preprocess = hub.KerasLayer("https://github.com/jeongukjae/tta/releases/download/0/preprocess.tar.gz")
+>>> # inference
+>>> input_tensor = preprocess(["이 모델은 나무위키로 학습되었습니다.", "근데 이 모델 어디다가 쓸 수 있을까요?", "나는 고양이를 좋아해!", "나는 강아지를 좋아해!"])
+>>> representation = model(input_tensor)
+>>> representation = tf.reduce_sum(representation * tf.cast(input_tensor["input_mask"], representation.dtype)[:, :, tf.newaxis], axis=1)
+>>> representation = tf.nn.l2_normalize(representation, axis=-1)
+>>> similarities = tf.tensordot(representation, representation, axes=[[1], [1]])
+>>> # results
+>>> similarities
+<tf.Tensor: shape=(4, 4), dtype=float32, numpy=
+array([[0.9999999 , 0.76468784, 0.7384633 , 0.7181306 ],
+       [0.76468784, 1.        , 0.81387675, 0.79722893],
+       [0.7384633 , 0.81387675, 0.9999999 , 0.96217746],
+       [0.7181306 , 0.79722893, 0.96217746, 1.        ]], dtype=float32)>
+```
+
 ## References
 
 * Official implementaion: <https://github.com/joongbo/tta>
@@ -93,8 +117,8 @@ KorSTS development and test set scores (100 * Spearman Correlation). You can che
 
 ---
 
-짧은 영어를 뒤로 하고, 대부분의 독자분이실 한국분들을 위해 적어보자면, 단순히 "회사에서 구상중인 모델 구조가 좋을까?"를 테스트해보기 위해 개인적으로 학습해본 모델입니다. 어느정도로 잘 나오는지 궁금해서 작성한 코드이기 때문에 하이퍼 파라미터 튜닝이라던가, 데이터셋을 신중히 골랐다던가 하는 것은 없었습니다. 단지 학습해보다보니 생각보다 값이 잘 나와서 결과와 함께 공개하게 되었습니다.
+짧은 영어를 뒤로 하고, 대부분의 독자분이실 한국분들을 위해 적어보자면, 단순히 "회사에서 구상중인 모델 구조가 좋을까?"를 테스트해보기 위해 개인적으로 학습해본 모델입니다. 어느정도로 잘 나오는지 궁금해서 작성한 코드이기 때문에 하이퍼 파라미터 튜닝이라던가, 데이터셋을 신중히 골랐다던가 하는 것은 없었습니다. 단지 학습해보다보니 생각보다 값이 잘 나와서 결과와 함께 공개하게 되었습니다. 커밋 로그를 보시면 짐작하실 수 있겠지만, 하루 정도에 후다닥 짜서 작은 GPU로 약 50시간 가량 돌린 모델입니다.
 
-원 논문에 나온 값들을 최대한 따라가려 했으며, 보통 밤에 작성했던 코드라 조금 명확하지 않은 부분이 있을 수도 있고, 원 구현과 다를 수도 있습니다. 해당 부분은 이슈로 달아주신다면 다시 확인해보겠습니다.
+원 논문에 나온 값들을 최대한 따라가려 했으며, 밤에 작성했던 코드라 조금 명확하지 않은 부분이 있을 수도 있고, 원 구현과 다를 수도 있습니다. 해당 부분은 이슈로 달아주신다면 다시 확인해보겠습니다.
 
 트러블 슈팅에 도움을 주신 백영민님([@baekyeongmin](https://github.com/baekyeongmin))께 감사드립니다.
