@@ -94,7 +94,7 @@ class TTAForPretraining(tf.keras.Model):
 
 
 class TTAModel(tf.keras.Model):
-    def __init__(self, tta_config: TTAConfig, unk_id: int = 4, **kwargs):
+    def __init__(self, tta_config: TTAConfig, mask_id: int = 4, **kwargs):
         super().__init__(**kwargs)
 
         self.tta_embedding = TTAEmbedding(
@@ -118,14 +118,14 @@ class TTAModel(tf.keras.Model):
             )
             for i in range(tta_config.num_hidden_layers)
         ]
-        self.unk_id = unk_id
+        self.mask_id = mask_id
 
     def call(self, input_tensor):
         input_word_ids = input_tensor["input_word_ids"]
         input_mask = input_tensor["input_mask"]
 
         embedding = self.tta_embedding(input_word_ids)
-        position_embedding = self.tta_embedding(tf.ones_like(input_word_ids) * self.unk_id)
+        position_embedding = self.tta_embedding(tf.ones_like(input_word_ids) * self.mask_id)
 
         with tf.name_scope("input_mask"):
             input_mask = tf.cast(input_mask, embedding.dtype)[:, tf.newaxis, tf.newaxis, :]
