@@ -8,10 +8,12 @@ from model import TTAConfig, TTAForPretraining
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--model-weight", required=True, type=str)
+parser.add_argument("--model-config", required=True, type=str)
 parser.add_argument("--dataset", required=True, type=str)
+parser.add_argument("--tokenizer", required=True, type=str)
 args = parser.parse_args()
 
-tta_config = TTAConfig.from_json("./configs/base.json")
+tta_config = TTAConfig.from_json(args.model_config)
 model = TTAForPretraining(tta_config)
 model.load_weights(args.model_weight)
 model.tta(
@@ -22,7 +24,7 @@ model.tta(
 )
 model.tta.summary()
 
-with open("./tokenizer/tokenizer.model", "rb") as f:
+with open(args.tokenizer, "rb") as f:
     tokenizer = text.SentencepieceTokenizer(f.read(), add_bos=True, add_eos=True)
 
 with open(args.dataset) as f:
@@ -53,5 +55,8 @@ def get_repr(sentences):
 refs_repr = get_repr(refs)
 hyps_repr = get_repr(hyps)
 
-similarities = (-tf.keras.losses.cosine_similarity(refs_repr, hyps_repr)).numpy().tolist()
-print(stats.spearmanr(labels, similarities))
+refs_repr = tf.nn.l2_normalize(refs_repr, axis=-1)
+hyps_repr = tf.nn.l2_normalize(hyps_repr, axis=-1)
+cosine_similarities = tf.reduce_sum(refs_repr * hyps_repr, axis=-1).numpy().tolist()
+
+print(stats.spearmanr(labels, cosine_similarities))
