@@ -74,13 +74,14 @@ This repository contains codes for Transformer-based Text Auto-encoder (T-TA, [p
 |Model|Params|development|test|
 |---|---|---|---|
 |My Implementation|17M|65.98|56.75|
+|-|-|-|-|
 |Korean SRoBERTa (base)|111M|63.34|48.96|
 |Korean SRoBERTa (large)|338M|60.15|51.35|
 |SXLM-R (base)|270M|64.27|45.05|
 |SXLM-R (large)|550M|55.00|39.92|
 |Korean fastText| - | - |47.96|
 
-KorSTS development and test set scores (100 * Spearman Correlation). You can check the details of all model except Korean T-TA on [this paper (KorNLI and KorSTS: New Benchmark Datasets for Korean Natural Language Understanding)](https://arxiv.org/abs/2004.03289).
+KorSTS development and test set scores (100 * Spearman Correlation). You can check the details of other models on [this paper (KorNLI and KorSTS: New Benchmark Datasets for Korean Natural Language Understanding)](https://arxiv.org/abs/2004.03289).
 
 ## References
 
