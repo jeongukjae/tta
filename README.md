@@ -1,6 +1,6 @@
 # T-TA
 
-This repository contains codes for Transformer-base Text Auto-encoder (T-TA, [paper: Fast and Accurate Deep Bidirectional Language Representations for Unsupervised Learning](https://www.aclweb.org/anthology/2020.acl-main.76/)) using TensorFlow 2.
+This repository contains codes for Transformer-based Text Auto-encoder (T-TA, [paper: Fast and Accurate Deep Bidirectional Language Representations for Unsupervised Learning](https://www.aclweb.org/anthology/2020.acl-main.76/)) using TensorFlow 2.
 
 ## How to train T-TA using custom dataset
 
