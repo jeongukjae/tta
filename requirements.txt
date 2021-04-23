@@ -1,5 +1,7 @@
 tensorflow
 tensorflow-text
+tensorflow-datasets
+tfds-korean
 sentencepiece
 scipy
 
